@@ -6,7 +6,6 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  // Quiz-related variables
   int currentQuestionIndex = 0;
   List<Map<String, dynamic>> quizQuestions = [
     {
@@ -14,16 +13,12 @@ class _QuizScreenState extends State<QuizScreen> {
       'options': ['Paris', 'Berlin', 'London', 'Madrid'],
       'correctAnswer': 'Paris',
     },
-    // Add more questions here...
   ];
 
   // Function to handle user's answer submission
   void checkAnswer(String selectedAnswer) {
     String correctAnswer = quizQuestions[currentQuestionIndex]['correctAnswer'];
-    // Perform logic to check the answer
-    // For example, update score, show feedback, etc.
-    // You might also navigate to the next question or show results
-    // For this example, I'll just move to the next question
+
     moveToNextQuestion();
   }
 
@@ -33,8 +28,7 @@ class _QuizScreenState extends State<QuizScreen> {
       if (currentQuestionIndex < quizQuestions.length - 1) {
         currentQuestionIndex++;
       } else {
-        // Quiz completed, show results or navigate to a different screen
-        // For this example, let's just reset the quiz
+
         currentQuestionIndex = 0;
       }
     });

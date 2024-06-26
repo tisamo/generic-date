@@ -36,7 +36,6 @@ class MyCustomFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
     return Expanded(
         child: Container(
           child: Column(

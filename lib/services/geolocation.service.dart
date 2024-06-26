@@ -8,15 +8,11 @@ class LocationObject {
 
   LocationObject(this.latitude, this.longitude);
 }
-/// Determine the current position of the device.
-///
-/// When the location services are not enabled or permissions
-/// are denied the `Future` will return an error.
+
 Future<Position> determinePosition() async {
   bool serviceEnabled;
   LocationPermission permission;
 
-  // Test if location services are enabled.
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     return Future.error('Location services are disabled.');
@@ -40,7 +36,6 @@ Future<Position> determinePosition() async {
 
 
 double haversineDistance(double lat1, double lon1, double lat2, double lon2) {
-  // Convert latitude and longitude from degrees to radians
   double toRadians(double degrees) {
     return degrees * (pi / 180);
   }
