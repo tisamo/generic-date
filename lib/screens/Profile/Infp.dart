@@ -53,7 +53,6 @@ class _QuizScreenState extends State<QuizScreen> {
               ),
             ),
             const SizedBox(height: 20.0),
-            // Display options as buttons
             ...((quizQuestions[currentQuestionIndex]['options'] as List<String>).map((option) {
               return ElevatedButton(
                 onPressed: () {

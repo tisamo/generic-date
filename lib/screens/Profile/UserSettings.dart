@@ -14,10 +14,10 @@ class UserSettings extends StatefulWidget {
 class MyCustomFormState extends State<UserSettings> {
   List<int> tags = [];
   List<Tag> options = [
-    Tag(id: 1, name: 're'),
-    Tag(id: 2, name: 'r22e'),
-    Tag(id: 3, name: 'rere'),
-    Tag(id: 4, name: 'ere')
+    Tag(id: 1, name: ''),
+    Tag(id: 2, name: ''),
+    Tag(id: 3, name: ''),
+    Tag(id: 4, name: '')
   ];
 
   @override

@@ -49,7 +49,6 @@ class Home extends StatelessWidget {
                       } else if (snapshot.hasError) {
                         return Text('fos');
                       } else {
-                        // When data is successfully fetched
                         if(events?.length == 0 || events == null){
                           return Padding(padding: EdgeInsets.only(top: 20), child:Text('Nincs esemény'));
                         }

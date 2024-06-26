@@ -5,7 +5,7 @@
   }
 
   bool  isValidName(name){
-    final nameRegExp = new RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
+    final nameRegExp = RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
     print(nameRegExp.hasMatch(name));
 
     return nameRegExp.hasMatch(name);

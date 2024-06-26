@@ -33,8 +33,6 @@ class EventFormState extends State<EventForm> {
   @override
   Widget build(BuildContext context) {
     final lastDate = DateTime(DateTime.now().year + 5);
-
-    // Build a Form widget using the _formKey created above.
     return Container(
       child: SizedBox(
         width: setFormWidth(MediaQuery.of(context).size.width),
@@ -42,7 +40,6 @@ class EventFormState extends State<EventForm> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              // Add TextFormFields and ElevatedButton here.
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -86,10 +83,7 @@ class EventFormState extends State<EventForm> {
                     padding: EdgeInsets.only(top: 30),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
                         if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
                           Event event = Event(
                               name: controllers[0].text,
                               partyTime: selectedDate,

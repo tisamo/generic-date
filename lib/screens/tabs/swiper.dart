@@ -62,14 +62,8 @@ class Swiper extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final item = users![index];
                                   return Dismissible(
-                                    // Each Dismissible must contain a Key. Keys allow Flutter to
-                                    // uniquely identify widgets.
                                     key: Key('item_$index'),
-                                    // Provide a function that tells the app
-                                    // what to do after an item has been swiped away.
                                     onDismissed: (direction) {
-                                      // Remove the item from the data source.
-                                      // Then show a snackbar.
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content:

@@ -35,6 +35,14 @@ class MyCustomFormState extends State<LoginForm> {
   ];
 
   @override
+  void dispose() {
+    for(var controller in controllers){
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
