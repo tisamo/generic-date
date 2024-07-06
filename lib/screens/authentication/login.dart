@@ -33,8 +33,8 @@ class MyCustomFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
 
   List<TextEditingController> controllers = [
-    TextEditingController(text: 'kristof.krasznai95@gmail.com'),
-    TextEditingController(text: 'Tisamo012345'),
+    TextEditingController(text: 'kek'),
+    TextEditingController(text: 'kek'),
   ];
 
   @override
