@@ -7,7 +7,7 @@ import '../../models/event.dart';
 import '../../provider/userlist-provider.dart';
 import '../../shared/elements/bottom-nav.dart';
 
-late List<Event>? events;
+late List<Event> events;
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -40,27 +40,25 @@ class Home extends StatelessWidget {
                 ),
                 ],
 
-                FutureBuilder(
+                FutureBuilder<List<Event>>(
                     future: _fetchEvent(),
-                    builder: (context, AsyncSnapshot snapshot) {
+                    builder: (context, AsyncSnapshot<List<Event>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        // While waiting for the data to load
                         return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Text('fos');
+                        return Text(snapshot.error.toString());
                       } else {
-                        if(events?.length == 0 || events == null){
-                          return Padding(padding: EdgeInsets.only(top: 20), child:Text('Nincs esemény'));
+                        if(snapshot.data?.length == 0 || snapshot.data == null){
+                          return const Padding(padding: EdgeInsets.only(top: 20), child:Text('Nincs esemény'));
                         }
                         else{
-                          return Container(
-                              child: ListView.builder(
-                                  itemCount: events?.length,
-                                  padding: EdgeInsets.only(top: 20),
-                                  scrollDirection: Axis.vertical,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Text('${events?[index].name}');
-                                  }));
+                          return ListView.builder(
+                              itemCount: snapshot.data?.length,
+                              padding: const EdgeInsets.only(top: 20),
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (_, int index) {
+                                return Text('${snapshot.data?[index].name}');
+                              });
                         }
                         }
 
@@ -71,8 +69,6 @@ class Home extends StatelessWidget {
   }
 }
 
-_fetchEvent() async {
-  List<Event>? event = await getEvents();
-  events = event;
-  return event;
+  Future<List<Event>>_fetchEvent()  async  {
+   return await getEvents();
 }

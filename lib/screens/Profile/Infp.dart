@@ -28,7 +28,6 @@ class _QuizScreenState extends State<QuizScreen> {
       if (currentQuestionIndex < quizQuestions.length - 1) {
         currentQuestionIndex++;
       } else {
-
         currentQuestionIndex = 0;
       }
     });
@@ -38,10 +37,10 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz'),
+        title: const Text('Quiz'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

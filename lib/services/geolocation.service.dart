@@ -60,6 +60,5 @@ double haversineDistance(double lat1, double lon1, double lat2, double lon2) {
 
 Future<String> _getLocation() async {
   Position location = await determinePosition();
-  final String latLong = '${location.latitude} ${location.longitude}';
-  return latLong;
+  return '${location.latitude} ${location.longitude}';
 }

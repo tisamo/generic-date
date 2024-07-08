@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:generic_date/models/login-into.dart';
 import 'package:generic_date/provider/userlist-provider.dart';
@@ -78,8 +80,9 @@ class MyCustomFormState extends State<LoginForm> {
                         decoration: const InputDecoration(hintText: 'password'),
                         obscureText: true,
                         validator: (val) {
-                          if (val == null || val.length < 7)
+                          if (val == null || val.length < 7) {
                             return 'Enter valid password';
+                          }
                           return null;
                         }),
                   ),
@@ -94,9 +97,8 @@ class MyCustomFormState extends State<LoginForm> {
                                   password: controllers[1].text);
                               var token = await userProvider.login(logInfo);
                               await userProvider.authenticate(token!);
-                              if (token == null) {
-                              } else {
-                                await saveTokenToStorage(token);
+                              if (token.isDefinedAndNotNull) {
+                                 await saveTokenToStorage(token);
                                  Navigator.pushNamed(context, '/');
                               }
                             }

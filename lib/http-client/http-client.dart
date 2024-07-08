@@ -5,9 +5,7 @@ final backendUrl = 'https://localhost:7185/';
 final dio = Dio();
 
 makeGetRequest(subUrl) async {
-  // make request
   final response = await http.get(Uri.parse('$backendUrl$subUrl'));
-  // sample info available in response
   final statusCode = response.statusCode;
 
   if (statusCode == 200) {
