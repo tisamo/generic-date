@@ -33,9 +33,10 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => NavProvider())
         ],
         child: MaterialApp(routes: {
-          '/': (context) =>  const UserSettings(),
+          '/': (context) =>  const Home(),
           '/home': (context) => const Home(),
           '/swiper': (context) => const Swiper(),
+          '/profile': (context) => const Swiper(),
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const RegisterScreen(),
           '/events/new': (context) => const AddEventScreen()

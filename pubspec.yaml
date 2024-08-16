@@ -47,6 +47,7 @@ dependencies:
   flutter_navigator: ^0.1.4
   geolocator: ^10.0.1
   chips_choice: ^3.0.1
+  flutter_cupertino_date_picker_fork: ^1.0.7
 
 dev_dependencies:
   flutter_test:

@@ -22,7 +22,7 @@ class UserProvider extends ChangeNotifier {
     print('test');
   }
 
-  Future<dynamic> getUser() async {
+  Future<User> getUser() async {
     return User.fromJson(makeGetRequest('user'));
   }
 

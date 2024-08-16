@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:generic_date/provider/userlist-provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,13 @@ class LoginForm extends StatefulWidget {
 
 class MyCustomFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
+  final userNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final bioController = TextEditingController();
+  final birthDayController = TextEditingController();
+
+
   List<TextEditingController> controllers = [
     TextEditingController(),
     TextEditingController(),
@@ -66,7 +74,7 @@ class MyCustomFormState extends State<LoginForm> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: controllers[0],
+                          controller: userNameController,
                           validator: (val) {
                             if (val!.length < 5) {
                               return 'Username must be at least 5 chars long';
@@ -79,34 +87,41 @@ class MyCustomFormState extends State<LoginForm> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: controllers[1],
+                          controller: emailController,
                           validator: (value) {
                             if (!regex.isValidEmail(value)) {
                               return 'Enter valid email please';
                             }
                             return null;
                           },
-                          decoration: InputDecoration(hintText: 'email'),
+                          decoration: const InputDecoration(hintText: 'email'),
                           obscureText: false,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                            controller: controllers[2],
-                            decoration: InputDecoration(hintText: 'password'),
+                            controller: passwordController,
+                            decoration: const InputDecoration(hintText: 'password'),
                             obscureText: true,
                             validator: (val) {
-                              if (val == null || val.length < 7)
+                              if (val == null || val.length < 7) {
                                 return 'Enter valid password';
+                              }
                               return null;
                             }),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: controllers[3],
-                          decoration: InputDecoration(hintText: 'description'),
+                        child: DatePickerWidget(
+                          dateFormat: 'yyyy-MM-dd',
+                          onConfirm: (dateTime, list){
+                            birthDayController.text = dateTime.toString();
+                          },
+                          pickerTheme: DateTimePickerTheme(
+                            showTitle: false,
+                          ),
+
                         ),
                       ),
                       Consumer<UserProvider>(
@@ -116,10 +131,11 @@ class MyCustomFormState extends State<LoginForm> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   User user =  User(
-                                      name: controllers[0].text,
-                                      email: controllers[1].text,
-                                      description: controllers[3].text,
-                                      password: controllers[2].text,
+                                      name: userNameController.text,
+                                      email: emailController.text,
+                                      description: bioController.text,
+                                      password: passwordController.text,
+                                      birthday:  birthDayController.text ,
                                       longitude: 0,
                                       latitude: 0,
                                       image:

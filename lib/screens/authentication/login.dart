@@ -33,17 +33,15 @@ Future<void> saveTokenToStorage(String token) async {
 class MyCustomFormState extends State<LoginForm> {
 
   final _formKey = GlobalKey<FormState>();
+  final userController = TextEditingController(text: 'kek');
+  final passController = TextEditingController(text: 'kek');
 
-  List<TextEditingController> controllers = [
-    TextEditingController(text: 'kek'),
-    TextEditingController(text: 'kek'),
-  ];
+
 
   @override
   void dispose() {
-    for(var controller in controllers){
-      controller.dispose();
-    }
+    userController.dispose();
+    passController.dispose();
     super.dispose();
   }
 
@@ -62,7 +60,7 @@ class MyCustomFormState extends State<LoginForm> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 40, 40, 0),
                     child: TextFormField(
-                      controller: controllers[0],
+                      controller: userController,
                       validator: (value) {
                         if (!regex.isValidEmail(value)) {
                           return 'Enter valid email please';
@@ -76,7 +74,7 @@ class MyCustomFormState extends State<LoginForm> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
                     child: TextFormField(
-                        controller: controllers[1],
+                        controller: passController,
                         decoration: const InputDecoration(hintText: 'password'),
                         obscureText: true,
                         validator: (val) {
@@ -93,17 +91,17 @@ class MyCustomFormState extends State<LoginForm> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               LoginInfo logInfo = LoginInfo(
-                                  email: controllers[0].text,
-                                  password: controllers[1].text);
+                                  email: userController.text,
+                                  password: passController.text);
                               var token = await userProvider.login(logInfo);
                               await userProvider.authenticate(token!);
-                              if (token.isDefinedAndNotNull) {
+                              if (token != null) {
                                  await saveTokenToStorage(token);
                                  Navigator.pushNamed(context, '/');
                               }
                             }
                           },
-                            child: const Text('Bejelentkezés'),
+                            child: const Text('Login'),
                         )),
                   ),
                 ],
@@ -147,7 +145,7 @@ class _UsersState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Login'),
+        title: const Text('Login'),
         automaticallyImplyLeading: false,
       ),
       body: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -156,7 +154,7 @@ class _UsersState extends State<LoginScreen> {
             Padding(
               padding: EdgeInsets.only(top: 100),
               child: Text(
-                'Bejelentkezés',
+                'Login',
                 style:
                 TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
