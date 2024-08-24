@@ -48,6 +48,13 @@ dependencies:
   geolocator: ^10.0.1
   chips_choice: ^3.0.1
   flutter_cupertino_date_picker_fork: ^1.0.7
+  image_picker: ^1.1.2
+  navigation_history_observer: ^1.1.1
+  cookie_jar: ^4.0.8
+  dio_cookie_manager: ^3.1.1
+  shared_prefs_cookie_store: ^0.0.2
+  flutter_secure_storage: ^9.2.2
+  chip_list: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +68,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
   build_runner: ^2.3.3
-  json_serializable: ^6.6.0
+  json_serializable: ^6.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

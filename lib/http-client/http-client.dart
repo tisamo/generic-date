@@ -1,35 +1,133 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-final backendUrl = 'https://localhost:7184/';
-final dio = Dio();
-   makeGetRequest(subUrl) async {
-    final response = await http.get(Uri.parse('$backendUrl$subUrl'));
-    final statusCode = response.statusCode;
+import 'package:generic_date/http-client/services/tokenService.dart';
+import 'package:generic_date/models/message.dart';
+import 'package:generic_date/provider/token-service.dart';
+import 'package:generic_date/provider/userlist-provider.dart';
+import 'package:generic_date/services/utils-service.dart';
 
-    if (statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('err');
-    }
+class HttpClient {
+  static final HttpClient _instance = HttpClient._internal();
+  late Dio dio;
+  final SecureStorageService storage = SecureStorageService();
 
+  factory HttpClient() {
+    return _instance;
   }
 
-  Future<Response> post(url, object) async {
-    return dio.post('$backendUrl$url', data: object,
-        onSendProgress: (int sent, int total) {
-          print('$sent $total');
-        });
+  HttpClient._internal() {
+    dio = Dio(BaseOptions(baseUrl: 'https://localhost:7241/'));
+    dio.interceptors.add(DioInterceptor(storage));
   }
 
-  getHttp(url, [token]) async {
-    if(token?.length != 0){
-      dio.options.headers = {
-        'Authorization': token
-      };
+  Future<Response> post(String url, dynamic object) async {
+    try {
+      final response = await dio.post(url, data: object);
+      return response;
+    } catch (e) {
+      print('Error occurred: $e');
+      rethrow;
     }
-    final response = await dio.get(backendUrl + url);
-   }
+  }
 
+  Future<Response> put(String url, dynamic object) async {
+    try {
+      final response = await dio.put(url, data: object);
+      return response;
+    } catch (e) {
+      print('Error occurred: $e');
+      rethrow;
+    }
+  }
 
+  Future<Response> get(String url) async {
+    Options options = Options();
+    options.headers?['Content-Type'] = 'application/json';
+    try {
+      final response = await dio.get(url);
+      return response;
+    } catch (e) {
+      print('Error occurred: $e');
+      rethrow;
+    }
+  }
 
+  Future<Response> refreshToken() async {
+    String? refreshToken = await storage.retrieveFile('refresh_token');
+    print(refreshToken);
+    try {
+      final response = await dio.get('user/token', options:
+      Options(headers: {'Content-type': 'application/json',
+                        'RefreshToken': refreshToken}));
+      return response;
+    } catch (e) {
+      print('Error occurred: $e');
+      rethrow;
+    }
+  }
+}
+
+class DioInterceptor extends Interceptor {
+  final SecureStorageService storage;
+  late Dio dio;
+
+  DioInterceptor(this.storage) {
+    dio = Dio(BaseOptions(baseUrl: "https://localhost:7241/"));
+  }
+
+  @override
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    options.headers['Content-Type'] = 'application/json';
+    final token = await storage.retrieveFile("access_token");
+    if (token != null) {
+      options.headers['Authorization'] = token;
+    }
+    return super.onRequest(options, handler);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    return super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      try {
+        await getAccessToken();
+        handler.resolve(await _retry(err.requestOptions));
+      } on DioException catch (e) {
+        handler.next(e);
+      }
+      return;
+    }
+    if (err.response?.statusCode == 400) {
+      try {
+        if(err.response?.data is Map<String, dynamic> ){
+          final message = Message.fromJson(err.response?.data);
+          showToast(message.message);
+        }
+      } catch (e){
+
+      }
+
+    }
+
+    handler.next(err);
+  }
+
+  Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
+    final token = await storage.retrieveFile("access_token");
+    final options = Options(
+      method: requestOptions.method,
+      headers: {'Authorization': token},
+    );
+
+    return dio.request<dynamic>(
+      requestOptions.path,
+      data: requestOptions.data,
+      queryParameters: requestOptions.queryParameters,
+      options: options,
+    );
+  }
+}

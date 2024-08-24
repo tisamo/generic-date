@@ -1,8 +1,9 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
+import 'package:generic_date/http-client/services/tokenService.dart';
 import 'package:generic_date/models/login-into.dart';
+import 'package:generic_date/provider/token-service.dart';
 import 'package:generic_date/provider/userlist-provider.dart';
+import 'package:generic_date/screens/screens.dart';
 import 'package:generic_date/shared/elements/navigation-element.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,9 +26,9 @@ class LoginForm extends StatefulWidget {
   }
 }
 
-Future<void> saveTokenToStorage(String token) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('token', token);
+Future<void> saveTokenToStorage(RefreshToken refreshToken) async {
+  SecureStorageService storage = SecureStorageService();
+  await storage.storeFile('refresh_token', refreshToken.refreshToken);
 }
 
 class MyCustomFormState extends State<LoginForm> {
@@ -92,12 +93,16 @@ class MyCustomFormState extends State<LoginForm> {
                             if (_formKey.currentState!.validate()) {
                               LoginInfo logInfo = LoginInfo(
                                   email: userController.text,
-                                  password: passController.text);
+                                  pass: passController.text);
                               var token = await userProvider.login(logInfo);
-                              await userProvider.authenticate(token!);
                               if (token != null) {
-                                 await saveTokenToStorage(token);
-                                 Navigator.pushNamed(context, '/');
+                                await saveTokenToStorage(token);
+                                await getAccessToken();
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Home()),
+                                      (Route<dynamic> route) => false,
+                                );
                               }
                             }
                           },

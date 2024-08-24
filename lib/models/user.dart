@@ -1,63 +1,46 @@
-// To parse this JSON data, do
-//
-//     final user = userFromJson(jsonString);
+import 'package:generic_date/models/role.dart';
+import 'package:generic_date/models/user_image.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-import 'dart:convert';
+part 'user.g.dart';
 
-import 'package:flutter/material.dart';
-
+@JsonSerializable()
 class User {
   User({
     this.id,
-    required this.name,
     this.created,
     this.infp,
-    this.password,
+    this.pass,
+    this.birthday,
+    this.username,
     required this.email,
-    required this.birthday,
-    required this.description,
-    required this.image,
-    required this.longitude,
-    required this.latitude
+    this.bio,
+    this.images  = const [],
+    this.hobbies  = const [],
+    this.verified,
+    this.roleName,
+    this.longitude,
+    this.latitude,
   });
+  @JsonKey(defaultValue: [])
+  final List<UserImage> images;
+  @JsonKey(defaultValue: [])
+  late final List<Role> hobbies;
 
-  String? id;
-  String name;
-  double longitude;
-  double latitude;
+  int? id;
+  String? username;
+  int? longitude;
+  int? latitude;
   DateTime? created;
-  String birthday;
+  String? birthday;
   String? infp;
+  bool? verified;
   String email;
-  String description;
-  String? password;
-  String image;
-
-  factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"],
-    created: DateTime.parse(json["created"]),
-    email: json["email"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    description: json["description"],
-    image: json["image"],
-    birthday: json["birthday"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "email": email,
-    "description": description,
-    "latitude": latitude,
-    "longitude": longitude,
-    "image": image,
-    "password": password,
-    "infp": infp,
-    "birthday": birthday
-  };
+  String? bio;
+  String? pass;
+  String? roleName;
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
+
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:generic_date/provider/nav-provider.dart';
+import 'package:generic_date/shared/styles/colors.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class _BottomNavState extends State<BottomNav> {
     return Consumer<NavProvider>(
         builder: (context, navProvider, child) => Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: ColorTheme.primaryColor,
               boxShadow: [
                 BoxShadow(
                   blurRadius: 20,
@@ -33,11 +34,11 @@ class _BottomNavState extends State<BottomNav> {
                   rippleColor: Colors.grey[300]!,
                   hoverColor: Colors.grey[100]!,
                   gap: 8,
-                  activeColor: Colors.black,
+                  activeColor: Colors.white,
                   iconSize: 24,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   duration: const Duration(milliseconds: 400),
-                  tabBackgroundColor: Colors.grey[100]!,
+                  tabBackgroundColor: ColorTheme.secondaryColor,
                   color: Colors.black,
                   tabs: const [
                     GButton(

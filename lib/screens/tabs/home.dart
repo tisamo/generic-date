@@ -1,74 +1,131 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
+import 'package:generic_date/screens/authentication/namedate.dart';
+import 'package:generic_date/screens/authentication/verification.dart';
 import 'package:generic_date/services/event-service.dart';
+import 'package:generic_date/shared/layout/simple_layout.dart';
 import 'package:provider/provider.dart';
 import '../../models/event.dart';
+import '../../models/user.dart';
 import '../../provider/userlist-provider.dart';
-import '../../shared/elements/bottom-nav.dart';
+import '../../shared/styles/colors.dart';
+import '../Profile/profile-settings.dart';
 
 late List<Event> events;
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
+  State<Home> createState() => _HomeState();
+
+}
+
+class _HomeState extends State<Home> {
+  PageController pageController = PageController();
+  List<int> number = [1,2,3,4];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      UserProvider provider = Provider.of<UserProvider>(context, listen: false);
+       User? user = await provider.getUser();
+       if(user.verified == false){
+         Navigator.pushAndRemoveUntil(
+           context,
+           MaterialPageRoute(builder: (context) => const VerificationScreen()),
+               (Route<dynamic> route) => false,
+         );
+         return;
+       }
+      if(user.birthday == null || user.username == null ){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) =>  const IntialSettings()),
+              (Route<dynamic> route) => false,
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: const Text('Home'),
-          automaticallyImplyLeading: false,
-        ),
+    double width = MediaQuery.sizeOf(context).width;
+    double height = MediaQuery.sizeOf(context).height;
 
-    body: Consumer<UserProvider>(
-      builder: (context, userProvider, child) =>
-        Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                if(!userProvider.isAuthenticated) ...[
-                TextButton(
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.amberAccent,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                ),
-                ],
+    double maxWidth = width > 620 ? 600 : width - 20;
+    double maxHeight = height > 900 ? 750 : height - 180;
 
-                FutureBuilder<List<Event>>(
-                    future: _fetchEvent(),
-                    builder: (context, AsyncSnapshot<List<Event>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text(snapshot.error.toString());
-                      } else {
-                        if(snapshot.data?.length == 0 || snapshot.data == null){
-                          return const Padding(padding: EdgeInsets.only(top: 20), child:Text('Nincs esemény'));
-                        }
-                        else{
-                          return ListView.builder(
-                              itemCount: snapshot.data?.length,
-                              padding: const EdgeInsets.only(top: 20),
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (_, int index) {
-                                return Text('${snapshot.data?[index].name}');
-                              });
-                        }
-                        }
 
-                    }),
-              ],
-            ))),
-        bottomNavigationBar: const BottomNav());
+
+    return SimpleLayout(layout:Consumer<UserProvider>(
+        builder: (context, userProvider, child) =>
+            Stack(
+                children: [
+            Column(
+            children: [
+            Expanded(
+            flex: 1,
+                child: Container(color: ColorTheme.primaryColor)),
+      Expanded(
+          flex: 1,
+          child: Container(color: ColorTheme.secondaryColor)),
+      Expanded(
+          flex: 1, child: Container(color: Colors.orangeAccent)),
+      ],
+    ),    Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: EdgeInsets.only(top:20),
+                          child: SizedBox(
+                            width: maxWidth ,
+                            height: maxHeight,
+                            child: Stack(
+                              children: [
+                               ...number.map((num){
+                                return AnimatedContainer(color: Colors.red,
+                                   width: maxWidth,
+                                   height: maxHeight,
+                                   duration: Duration(milliseconds: 1000),
+                                   curve: Curves.bounceInOut,
+                                   child: Text(num.toString())  ,
+                                   );
+
+                               })
+
+                              ],
+                            ),
+
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          if(number.isEmpty){
+                            return;
+                          }
+                          setState(() {
+                            number.removeLast();
+                          });
+                        },
+                        child: Container(
+                          width: maxWidth,
+                          color: Colors.white,
+                          height: 80,
+                        ),
+                      )
+
+                    ],
+                  )
+                ]))
+        , title: 'Home', hideAppbar: true,);
   }
 }
 
-  Future<List<Event>>_fetchEvent()  async  {
-   return await getEvents();
+void checkUserData(){
+
 }
+
+
