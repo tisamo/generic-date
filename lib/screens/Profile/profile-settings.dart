@@ -129,7 +129,7 @@ class _ProfileSettingsState<T extends ChangeNotifier>
                                           ),
                                         ),
                                         child: el <
-                                                userProvider.user.images.length
+                                                userProvider.user!.images.length
                                             ? Stack(
                                                 children: [
                                                   Positioned.fill(
@@ -157,7 +157,7 @@ class _ProfileSettingsState<T extends ChangeNotifier>
                                                           onPressed: () {
                                                             userProvider.DeleteImage(
                                                                 userProvider
-                                                                        .user
+                                                                        .user!
                                                                         .images[
                                                                     el]);
                                                           },
@@ -338,7 +338,7 @@ class _ProfileSettingsState<T extends ChangeNotifier>
         return Dialog.fullscreen(
           child: Consumer<UserProvider>(
             builder: (BuildContext context, UserProvider userProvider, Widget? child) {
-              User currentUser = userProvider.user;
+              User currentUser = userProvider.user!;
 
               return Column(children: [
                 Container(

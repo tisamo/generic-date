@@ -10,7 +10,7 @@ import '../models/role.dart';
 import '../models/user.dart';
 
 class UserProvider extends ChangeNotifier {
-  User user = User(email: '');
+  User? user;
   final HttpClient http = HttpClient();
 
   bool isAuthenticated = false;
@@ -23,8 +23,8 @@ class UserProvider extends ChangeNotifier {
 
   void addToSelectedHobbies(Role hobby) {
     if (!user!.hobbies.any((el) => el.id == hobby.id)) {
-      if(user!.hobbies.length==10){
-        showToast('You can max have 10 hobbies');
+      if(user!.hobbies.length==5){
+        showToast('You can max have 5 hobbies');
         return;
       }
 
@@ -60,6 +60,24 @@ class UserProvider extends ChangeNotifier {
 
   }
 
+  Future<List<User>?> getUsers() async{
+    try {
+      final response = await http.get('match/find');
+      if (response.statusCode == 200) {
+        final List<Map<String, dynamic>> responseData = List<Map<String, dynamic>>.from(response.data);
+        List<User> userList = responseData.map((data){
+          return User.fromJson(data);
+        }).toList();
+        return userList;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Failed to login: $e');
+    }
+  }
+
+
   Future<bool> verifyUser(String code) async {
     try {
       final response = await http.get('user/verify/$code');
@@ -79,8 +97,8 @@ class UserProvider extends ChangeNotifier {
     try {
       final response = await http.get('user/init/$name/$date');
       if (response.statusCode == 200) {
-        user.username = name;
-        user.birthday = date;
+        user!.username = name;
+        user!.birthday = date;
         notifyListeners();
         return true;
       } else {

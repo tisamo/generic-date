@@ -232,7 +232,7 @@ class _VerificationState extends State<VerificationScreen> {
                                   message = "Verification was not successful";
                                 }
                                 showToast(message);
-                                User user = provider.user;
+                                User user = provider.user!;
                                 if(user.birthday == null || user.username == null ){
                                   Navigator.pushAndRemoveUntil(
                                     context,

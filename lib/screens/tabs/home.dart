@@ -17,34 +17,26 @@ class Home extends StatefulWidget {
 
   @override
   State<Home> createState() => _HomeState();
-
 }
 
 class _HomeState extends State<Home> {
   PageController pageController = PageController();
-  List<int> number = [1,2,3,4];
+  List<User>? users;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       UserProvider provider = Provider.of<UserProvider>(context, listen: false);
-       User? user = await provider.getUser();
-       if(user.verified == false){
-         Navigator.pushAndRemoveUntil(
-           context,
-           MaterialPageRoute(builder: (context) => const VerificationScreen()),
-               (Route<dynamic> route) => false,
-         );
-         return;
-       }
-      if(user.birthday == null || user.username == null ){
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) =>  const IntialSettings()),
-              (Route<dynamic> route) => false,
-        );
-      }
+      await provider.getUser();
+      await _fetchUsers(provider);
+    });
+  }
+
+  Future<void> _fetchUsers(UserProvider provider) async {
+    List<User>? fetchedUsers = await provider.getUsers();
+    setState(() {
+      users = fetchedUsers;
     });
   }
 
@@ -56,76 +48,103 @@ class _HomeState extends State<Home> {
     double maxWidth = width > 620 ? 600 : width - 20;
     double maxHeight = height > 900 ? 750 : height - 180;
 
-
-
-    return SimpleLayout(layout:Consumer<UserProvider>(
-        builder: (context, userProvider, child) =>
-            Stack(
-                children: [
-            Column(
+    return SimpleLayout(
+      layout: Consumer<UserProvider>(builder: (context, userProvider, child) {
+        if (userProvider.user == null) {
+          return const Center(
+              child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Center(
+                    child: Text("No user found"),
+                  )));
+        } else {
+          return Stack(
             children: [
-            Expanded(
-            flex: 1,
-                child: Container(color: ColorTheme.primaryColor)),
-      Expanded(
-          flex: 1,
-          child: Container(color: ColorTheme.secondaryColor)),
-      Expanded(
-          flex: 1, child: Container(color: Colors.orangeAccent)),
-      ],
-    ),    Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top:20),
-                          child: SizedBox(
-                            width: maxWidth ,
-                            height: maxHeight,
-                            child: Stack(
-                              children: [
-                               ...number.map((num){
-                                return AnimatedContainer(color: Colors.red,
-                                   width: maxWidth,
-                                   height: maxHeight,
-                                   duration: Duration(milliseconds: 1000),
-                                   curve: Curves.bounceInOut,
-                                   child: Text(num.toString())  ,
-                                   );
+              Column(
+                children: [
+                  Expanded(
+                      flex: 1,
+                      child: Container(color: ColorTheme.primaryColor)),
+                  Expanded(
+                      flex: 1,
+                      child: Container(color: ColorTheme.secondaryColor)),
+                  Expanded(
+                      flex: 1, child: Container(color: Colors.orangeAccent)),
+                ],
+              ),
+              Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: SizedBox(
+                        width: maxWidth,
+                        height: maxHeight,
+                        child: users == null
+                            ? const CircularProgressIndicator()
+                            : users!.isEmpty
+                                ? const Text(
+                                    "No data")
+                                : Stack(
+                                    children: [
+                                      ...users!.map((user) {
+                                        return Stack(
+                                          children: [
+                                        Positioned.fill(
+                                        child: Image.network(
+                                          'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                                          fit: BoxFit
+                                              .cover, // You can also try BoxFit.fill if you want to stretch the image
+                                        )),
+                                        Positioned(
+                                          bottom: 50,
+                                          left: 20,
+                                          child: Text(user.username!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)
+                                        ),
+                                            Positioned(
+                                                bottom: 20,
+                                                left: 20,
+                                                child: Text(user.birthday!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold), )
+                                            )
 
-                               })
+                                          ],
+                                        );
 
-                              ],
-                            ),
-
-                          ),
-                        ),
+                                      }).toList()
+                                    ],
+                                  ),
                       ),
-                      GestureDetector(
-                        onTap: (){
-                          if(number.isEmpty){
-                            return;
-                          }
-                          setState(() {
-                            number.removeLast();
-                          });
-                        },
-                        child: Container(
-                          width: maxWidth,
-                          color: Colors.white,
-                          height: 80,
-                        ),
-                      )
-
-                    ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      if (users == null || users!.isEmpty) {
+                        return;
+                      }
+                      setState(() {
+                        users!
+                            .removeLast();
+                      });
+                      if (users!.isEmpty) {
+                        await _fetchUsers(userProvider);
+                      }
+                    },
+                    child: Container(
+                      width: maxWidth,
+                      color: Colors.white,
+                      height: 80,
+                    ),
                   )
-                ]))
-        , title: 'Home', hideAppbar: true,);
+                ],
+              ),
+            ],
+          );
+        }
+      }),
+      title: 'Home',
+      hideAppbar: true,
+    );
   }
 }
-
-void checkUserData(){
-
-}
-
-

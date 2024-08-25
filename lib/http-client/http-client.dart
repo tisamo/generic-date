@@ -108,9 +108,9 @@ class DioInterceptor extends Interceptor {
           showToast(message.message);
         }
       } catch (e){
-
+        handler.next(err);
       }
-
+      return;
     }
 
     handler.next(err);
