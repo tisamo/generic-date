@@ -39,9 +39,7 @@ class _HomeState extends State<Home> {
     if(provider.queriedUsers.isEmpty){
       List<User>? fetchedUsers = await provider.getUsers();
       if(fetchedUsers != null){
-        setState(() {
-          provider.queriedUsers = fetchedUsers;
-        });
+        provider.updateQueriedUsers(fetchedUsers);
       }
     }
   }

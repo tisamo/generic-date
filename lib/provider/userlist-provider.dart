@@ -43,6 +43,10 @@ class UserProvider extends ChangeNotifier {
     user!.images.add(userImage);
     notifyListeners();
   }
+  updateQueriedUsers(List<User> fetchedUser){
+    queriedUsers = fetchedUser;
+    notifyListeners();
+  }
 
   removeLastItemFromQueriedList(){
     queriedUsers.removeLast();
