@@ -48,7 +48,7 @@ class _VerificationState extends State<VerificationScreen> {
               Expanded(
                 flex: 1,
                 child: Container(
-                  color: Colors.orangeAccent,
+                  color: ColorTheme.tertiaryColor,
                 ),
               ),
               Expanded(
@@ -203,7 +203,7 @@ class _VerificationState extends State<VerificationScreen> {
                             child: const Text(
                               "Send email again",
                               style: TextStyle(
-                                color: Colors.orangeAccent,
+                                color: ColorTheme.tertiaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
                               ),

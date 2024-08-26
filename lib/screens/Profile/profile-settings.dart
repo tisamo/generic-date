@@ -71,7 +71,7 @@ class _ProfileSettingsState<T extends ChangeNotifier>
                       flex: 1,
                       child: Container(color: ColorTheme.secondaryColor)),
                   Expanded(
-                      flex: 1, child: Container(color: Colors.orangeAccent)),
+                      flex: 1, child: Container(color: ColorTheme.tertiaryColor)),
                 ],
               ),
               Center(

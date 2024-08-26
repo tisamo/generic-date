@@ -43,7 +43,7 @@ class InfpResultScreen extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Container(
-            color: Colors.orangeAccent,
+            color: ColorTheme.tertiaryColor,
             alignment: Alignment.topRight,
             child: Text(
               infpInfos[1],

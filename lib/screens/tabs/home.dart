@@ -76,7 +76,7 @@ class _HomeState extends State<Home> {
                       flex: 1,
                       child: Container(color: ColorTheme.secondaryColor)),
                   Expanded(
-                      flex: 1, child: Container(color: Colors.orangeAccent)),
+                      flex: 1, child: Container(color: ColorTheme.tertiaryColor)),
                 ],
               ),
               Column(
