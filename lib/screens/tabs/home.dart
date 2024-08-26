@@ -3,6 +3,7 @@ import 'package:generic_date/screens/authentication/namedate.dart';
 import 'package:generic_date/screens/authentication/verification.dart';
 import 'package:generic_date/services/event-service.dart';
 import 'package:generic_date/shared/layout/simple_layout.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 import '../../models/event.dart';
 import '../../models/user.dart';
@@ -21,23 +22,28 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   PageController pageController = PageController();
-  List<User>? users;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       UserProvider provider = Provider.of<UserProvider>(context, listen: false);
-      await provider.getUser();
+      if(provider.user == null){
+        await provider.getUser();
+      }
       await _fetchUsers(provider);
     });
   }
 
   Future<void> _fetchUsers(UserProvider provider) async {
-    List<User>? fetchedUsers = await provider.getUsers();
-    setState(() {
-      users = fetchedUsers;
-    });
+    if(provider.queriedUsers.isEmpty){
+      List<User>? fetchedUsers = await provider.getUsers();
+      if(fetchedUsers != null){
+        setState(() {
+          provider.queriedUsers = fetchedUsers;
+        });
+      }
+    }
   }
 
   @override
@@ -78,18 +84,18 @@ class _HomeState extends State<Home> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 20),
+                      padding: const EdgeInsets.only(top: 20),
                       child: SizedBox(
                         width: maxWidth,
                         height: maxHeight,
-                        child: users == null
+                        child: userProvider.queriedUsers == null
                             ? const CircularProgressIndicator()
-                            : users!.isEmpty
+                            : userProvider.queriedUsers.isEmpty
                                 ? const Text(
                                     "No data")
                                 : Stack(
                                     children: [
-                                      ...users!.map((user) {
+                                      ...userProvider.queriedUsers.map((user) {
                                         return Stack(
                                           children: [
                                         Positioned.fill(
@@ -120,14 +126,11 @@ class _HomeState extends State<Home> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      if (users == null || users!.isEmpty) {
+                      if (userProvider.queriedUsers.isEmpty) {
                         return;
                       }
-                      setState(() {
-                        users!
-                            .removeLast();
-                      });
-                      if (users!.isEmpty) {
+                        userProvider.removeLastItemFromQueriedList();
+                      if (userProvider.queriedUsers.isEmpty) {
                         await _fetchUsers(userProvider);
                       }
                     },

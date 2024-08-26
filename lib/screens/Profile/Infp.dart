@@ -150,7 +150,6 @@ class _QuizScreenState extends State<QuizScreen> {
       });
       Navigator.pushNamed(context, '/test-result/$result');
     }
-      return null;
   }
 
   Color selectColorBasedOnIndex(int index) {
@@ -297,8 +296,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                     ignoring: hideNextButton,
                                     child: TextButton(
                                       onPressed: () {
-                                        print('kek');
-
                                         if ((currentQuestionIndex + 1) !=
                                             quiz.length) {
                                           setState(() {

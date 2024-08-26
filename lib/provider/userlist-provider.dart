@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:generic_date/http-client/services/tokenService.dart';
-import 'package:generic_date/models/Apiresponse.dart';
 import 'package:generic_date/models/user_image.dart';
 import 'package:generic_date/services/utils-service.dart';
 import '../http-client/http-client.dart';
@@ -11,6 +9,7 @@ import '../models/user.dart';
 
 class UserProvider extends ChangeNotifier {
   User? user;
+  List<User> queriedUsers = [];
   final HttpClient http = HttpClient();
 
   bool isAuthenticated = false;
@@ -45,12 +44,16 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  removeLastItemFromQueriedList(){
+    queriedUsers.removeLast();
+    notifyListeners();
+  }
+
   Future<void> updateUserHobbies() async {
     try {
       final response = await http.put('hobby/user', user!.hobbies.map((h)=>h.toJson()).toList());
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = response.data as Map<String, dynamic>;
-        print(responseData);
       } else {
         throw Exception('Failed to login. Status code: ${response.statusCode}');
       }

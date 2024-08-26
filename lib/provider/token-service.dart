@@ -17,7 +17,6 @@ Future<void> getAccessToken() async {
       AccessToken accessToken = AccessToken.fromJson(responseData);
       await storage.storeFile("access_token", accessToken.accessToken);
     } else {
-      print("wtf");
       await logout();
       throw Exception('Failed to login. Status code: ${response.statusCode}');
     }
@@ -29,10 +28,8 @@ Future<void> getAccessToken() async {
 }
 
 Future<void> logout() async {
-  print("wtf");
 
   await storage.deleteFile("access_token");
   await storage.deleteFile("refresh_token");
   NavigationService.navigatorKey.currentState?.pushNamed('/login');
-  print('User has been logged out.');
 }

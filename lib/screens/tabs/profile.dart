@@ -60,10 +60,10 @@ class Profile extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const  SizedBox(
                             height: 10,
                           ),
-                          Row(
+                         const  Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text('name'),
