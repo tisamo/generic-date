@@ -14,6 +14,7 @@ import 'package:generic_date/screens/tabs/home.dart';
 import 'package:generic_date/services/navigator-service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'provider/message-provider.dart';
 import 'provider/userlist-provider.dart';
 
 
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget with RouteAware {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => UserProvider()),
-          ChangeNotifierProvider(create: (context) => NavProvider())
+          ChangeNotifierProvider(create: (context) => NavProvider()),
+          ChangeNotifierProvider(create: (context) => MessagesProvider())
         ],
         child:  MaterialApp(
           navigatorKey: NavigationService.navigatorKey,
@@ -51,7 +53,7 @@ class RouteGenerator {
       '/register': (_) => const RegisterScreen(),
       '/login': (_) => const LoginScreen(),
       '/verification': (_) => const VerificationScreen(),
-      '/messages': (_) => const Messages(),
+      '/messages': (_) =>  Messages(),
       '/profile': (_) => const Profile(),
       '/profile-settings': (_) => const  ProfileSettings(),
       '/personality-test': (_) => QuizScreen(),

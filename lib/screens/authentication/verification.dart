@@ -29,6 +29,14 @@ class _VerificationState extends State<VerificationScreen> {
   }
 
   @override
+  void dispose() {
+     one.dispose();
+     two.dispose();
+     three.dispose();
+     four.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.sizeOf(context).width;
     double height = MediaQuery.sizeOf(context).height;

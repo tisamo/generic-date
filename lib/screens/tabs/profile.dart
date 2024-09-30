@@ -48,7 +48,7 @@ class Profile extends StatelessWidget {
                                         Colors.black.withOpacity(0.5),
                                     radius: 20.0,
                                     child: IconButton(
-                                      icon: Icon(Icons.edit,
+                                      icon: const Icon(Icons.edit,
                                           color: Colors.white, size: 20.0),
                                       onPressed: () {
                                         Navigator.pushNamed(
@@ -60,10 +60,10 @@ class Profile extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const  SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                         const  Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text('name'),

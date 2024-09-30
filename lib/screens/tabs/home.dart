@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       UserProvider provider = Provider.of<UserProvider>(context, listen: false);
-      if(provider.user == null){
+      if (provider.user == null) {
         await provider.getUser();
       }
       await _fetchUsers(provider);
@@ -36,9 +36,9 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _fetchUsers(UserProvider provider) async {
-    if(provider.queriedUsers.isEmpty){
+    if (provider.queriedUsers.isEmpty) {
       List<User>? fetchedUsers = await provider.getUsers();
-      if(fetchedUsers != null){
+      if (fetchedUsers != null) {
         provider.updateQueriedUsers(fetchedUsers);
       }
     }
@@ -74,7 +74,8 @@ class _HomeState extends State<Home> {
                       flex: 1,
                       child: Container(color: ColorTheme.secondaryColor)),
                   Expanded(
-                      flex: 1, child: Container(color: ColorTheme.tertiaryColor)),
+                      flex: 1,
+                      child: Container(color: ColorTheme.tertiaryColor)),
                 ],
               ),
               Column(
@@ -89,33 +90,41 @@ class _HomeState extends State<Home> {
                         child: userProvider.queriedUsers == null
                             ? const CircularProgressIndicator()
                             : userProvider.queriedUsers.isEmpty
-                                ? const Text(
-                                    "No data")
+                                ? const Text("No data")
                                 : Stack(
                                     children: [
                                       ...userProvider.queriedUsers.map((user) {
                                         return Stack(
                                           children: [
-                                        Positioned.fill(
-                                        child: Image.network(
-                                          'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                                          fit: BoxFit
-                                              .cover, // You can also try BoxFit.fill if you want to stretch the image
-                                        )),
-                                        Positioned(
-                                          bottom: 50,
-                                          left: 20,
-                                          child: Text(user.username!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)
-                                        ),
+                                            Positioned.fill(
+                                                child: Image.network(
+                                              'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                                              fit: BoxFit
+                                                  .cover, // You can also try BoxFit.fill if you want to stretch the image
+                                            )),
+                                            Positioned(
+                                                bottom: 50,
+                                                left: 20,
+                                                child: Text(
+                                                  user.username!,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 30),
+                                                )),
                                             Positioned(
                                                 bottom: 20,
                                                 left: 20,
-                                                child: Text(user.birthday!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold), )
-                                            )
-
+                                                child: Text(
+                                                  user.birthday!,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ))
                                           ],
                                         );
-
                                       }).toList()
                                     ],
                                   ),
@@ -127,7 +136,7 @@ class _HomeState extends State<Home> {
                       if (userProvider.queriedUsers.isEmpty) {
                         return;
                       }
-                        userProvider.removeLastItemFromQueriedList();
+                      userProvider.removeLastItemFromQueriedList();
                       if (userProvider.queriedUsers.isEmpty) {
                         await _fetchUsers(userProvider);
                       }

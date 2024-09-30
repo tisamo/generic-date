@@ -268,7 +268,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             ),
                           )),
                       Padding(
-                        padding: EdgeInsets.only(top: 40),
+                        padding: const EdgeInsets.only(top: 40),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
